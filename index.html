@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DasBoot - Home Maintenance Work Orders</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <h1><i class="fas fa-wrench"></i> DasBoot Work Orders</h1>
+                <div class="header-pulse-centered">
+                    <div class="pulse-line" id="pulse-line">
+                        <svg width="120" height="40" viewBox="0 0 120 40">
+                            <path d="M0,20 L20,20 L25,10 L30,30 L35,5 L40,35 L45,20 L120,20" 
+                                  stroke="white" stroke-width="2" fill="none" class="heartbeat-path"/>
+                        </svg>
+                    </div>
+                </div>
+                <nav>
+                    <button class="nav-btn active" data-tab="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</button>
+                    <button class="nav-btn" data-tab="create-order"><i class="fas fa-plus-circle"></i> New Order</button>
+                    <button class="nav-btn" data-tab="contractors"><i class="fas fa-users"></i> Contractors</button>
+                    <button class="nav-btn" data-tab="settings"><i class="fas fa-cog"></i> Settings</button>
+                    <button class="nav-btn" id="readme-btn"><i class="fas fa-book"></i> README</button>
+                </nav>
+                <div class="header-datetime" id="header-datetime">
+                    <!-- Time and date will be populated here -->
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="container">
+
+        <main>
+            <!-- Dashboard Tab -->
+            <div id="dashboard" class="tab-content active">
+                <div class="dashboard-header">
+                    <h2>Work Order Dashboard</h2>
+                    <div class="stats">
+                        <div class="stat-card">
+                            <i class="fas fa-clipboard-list"></i>
+                            <div>
+                                <span class="stat-number" id="total-orders">0</span>
+                                <span class="stat-label">Total Orders</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-clock"></i>
+                            <div>
+                                <span class="stat-number" id="pending-orders">0</span>
+                                <span class="stat-label">Pending</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-tools"></i>
+                            <div>
+                                <span class="stat-number" id="in-progress-orders">0</span>
+                                <span class="stat-label">In Progress</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-check-circle"></i>
+                            <div>
+                                <span class="stat-number" id="completed-orders">0</span>
+                                <span class="stat-label">Completed</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="orders-container">
+                    <div class="orders-header">
+                        <h3>Recent Work Orders</h3>
+                        <div class="filter-controls">
+                            <select id="status-filter">
+                                <option value="all">All Status</option>
+                                <option value="pending">Pending</option>
+                                <option value="assigned">Assigned</option>
+                                <option value="in-progress">In Progress</option>
+                                <option value="completed">Completed</option>
+                                <option value="cancelled">Cancelled</option>
+                            </select>
+                            <select id="category-filter">
+                                <option value="all">All Categories</option>
+                                <option value="plumbing">Plumbing</option>
+                                <option value="electrical">Electrical</option>
+                                <option value="hvac">HVAC</option>
+                                <option value="carpentry">Carpentry</option>
+                                <option value="painting">Painting</option>
+                                <option value="roofing">Roofing</option>
+                                <option value="landscaping">Landscaping</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="orders-list" class="orders-list">
+                        <!-- Orders will be dynamically populated here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Create Order Tab -->
+            <div id="create-order" class="tab-content">
+                <h2>Create New Work Order</h2>
+                <form id="work-order-form" class="work-order-form">
+                    <div class="form-group">
+                        <label for="order-title">Issue Title *</label>
+                        <input type="text" id="order-title" name="title" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="order-category">Category *</label>
+                        <select id="order-category" name="category" required>
+                            <option value="">Select Category</option>
+                            <option value="plumbing">Plumbing</option>
+                            <option value="electrical">Electrical</option>
+                            <option value="hvac">HVAC</option>
+                            <option value="carpentry">Carpentry</option>
+                            <option value="painting">Painting</option>
+                            <option value="roofing">Roofing</option>
+                            <option value="landscaping">Landscaping</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="order-priority">Priority *</label>
+                        <select id="order-priority" name="priority" required>
+                            <option value="">Select Priority</option>
+                            <option value="low">Low</option>
+                            <option value="medium">Medium</option>
+                            <option value="high">High</option>
+                            <option value="urgent">Urgent</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="order-description">Description *</label>
+                        <textarea id="order-description" name="description" rows="4" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="order-location">Location</label>
+                        <input type="text" id="order-location" name="location" placeholder="e.g., Kitchen, Bathroom, Living Room">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="order-budget">Budget Estimate</label>
+                        <input type="number" id="order-budget" name="budget" min="0" step="0.01" placeholder="0.00">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="order-due-date">Due Date</label>
+                        <input type="date" id="order-due-date" name="dueDate">
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Create Work Order</button>
+                        <button type="button" class="btn btn-secondary" id="find-contractors-btn">Find Local Contractors</button>
+                    </div>
+                </form>
+
+                <!-- Local Contractors Search Results -->
+                <div id="local-contractors-results" class="contractors-results" style="display: none;">
+                    <h3>Local Contractors Found</h3>
+                    <div id="contractors-list"></div>
+                </div>
+            </div>
+
+            <!-- Contractors Tab -->
+            <div id="contractors" class="tab-content">
+                <div class="contractors-header">
+                    <h2>Contractor Management</h2>
+                    <button class="btn btn-primary" id="add-contractor-btn">Add New Contractor</button>
+                </div>
+
+                <div id="contractors-grid" class="contractors-grid">
+                    <!-- Contractors will be dynamically populated here -->
+                </div>
+
+                <!-- Add Contractor Modal -->
+                <div id="contractor-modal" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3>Add New Contractor</h3>
+                            <span class="close" id="close-contractor-modal">&times;</span>
+                        </div>
+                        <form id="contractor-form" class="contractor-form">
+                            <div class="form-group">
+                                <label for="contractor-name">Company Name *</label>
+                                <input type="text" id="contractor-name" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="contractor-contact">Contact Person</label>
+                                <input type="text" id="contractor-contact" name="contact">
+                            </div>
+                            <div class="form-group">
+                                <label for="contractor-email">Email *</label>
+                                <input type="email" id="contractor-email" name="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="contractor-phone">Phone</label>
+                                <input type="tel" id="contractor-phone" name="phone">
+                            </div>
+                            <div class="form-group">
+                                <label for="contractor-specialties">Specialties</label>
+                                <select id="contractor-specialties" name="specialties" multiple>
+                                    <option value="plumbing">Plumbing</option>
+                                    <option value="electrical">Electrical</option>
+                                    <option value="hvac">HVAC</option>
+                                    <option value="carpentry">Carpentry</option>
+                                    <option value="painting">Painting</option>
+                                    <option value="roofing">Roofing</option>
+                                    <option value="landscaping">Landscaping</option>
+                                    <option value="other">Other</option>
+                                </select>
+                                <small>Hold Ctrl/Cmd to select multiple</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="contractor-rating">Rating</label>
+                                <select id="contractor-rating" name="rating">
+                                    <option value="">Not Rated</option>
+                                    <option value="1">1 Star</option>
+                                    <option value="2">2 Stars</option>
+                                    <option value="3">3 Stars</option>
+                                    <option value="4">4 Stars</option>
+                                    <option value="5">5 Stars</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="contractor-notes">Notes</label>
+                                <textarea id="contractor-notes" name="notes" rows="3"></textarea>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary">Save Contractor</button>
+                                <button type="button" class="btn btn-secondary" id="cancel-contractor">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Tab -->
+            <div id="settings" class="tab-content">
+                <h2>Settings</h2>
+                <div class="settings-section">
+                    <h3>Email Configuration</h3>
+                    <form id="email-settings-form">
+                        <div class="form-group">
+                            <label for="user-email">Your Email Address</label>
+                            <input type="email" id="user-email" name="userEmail">
+                        </div>
+                        <div class="form-group">
+                            <label for="email-template">Default Email Template</label>
+                            <textarea id="email-template" name="emailTemplate" rows="6">Subject: Work Order Assignment - {{orderTitle}}
+
+Dear {{contractorName}},
+
+You have been assigned a new work order:
+
+Title: {{orderTitle}}
+Category: {{orderCategory}}
+Priority: {{orderPriority}}
+Description: {{orderDescription}}
+Location: {{orderLocation}}
+Due Date: {{orderDueDate}}
+
+Please contact us to confirm your availability.
+
+Best regards,
+{{userEmail}}</textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Email Settings</button>
+                    </form>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Data Management</h3>
+                    <div class="data-actions">
+                        <button class="btn btn-secondary" id="export-data-btn">Export Data</button>
+                        <button class="btn btn-secondary" id="import-data-btn">Import Data</button>
+                        <input type="file" id="import-file" accept=".json" style="display: none;">
+                        <button class="btn btn-danger" id="clear-data-btn">Clear All Data</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Order Detail Modal -->
+        <div id="order-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Work Order Details</h3>
+                    <span class="close" id="close-order-modal">&times;</span>
+                </div>
+                <div id="order-detail-content" class="order-detail">
+                    <!-- Order details will be populated here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Email Modal -->
+        <div id="email-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Send Email to Contractor</h3>
+                    <span class="close" id="close-email-modal">&times;</span>
+                </div>
+                <form id="email-form">
+                    <div class="form-group">
+                        <label for="email-to">To:</label>
+                        <input type="email" id="email-to" name="to" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="email-subject">Subject:</label>
+                        <input type="text" id="email-subject" name="subject">
+                    </div>
+                    <div class="form-group">
+                        <label for="email-body">Message:</label>
+                        <textarea id="email-body" name="body" rows="8"></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Send Email</button>
+                        <button type="button" class="btn btn-secondary" id="cancel-email">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- README Modal -->
+        <div id="readme-modal" class="modal">
+            <div class="modal-content readme-modal-content">
+                <div class="modal-header">
+                    <h3><i class="fas fa-book"></i> DasBoot Documentation</h3>
+                    <span class="close" id="close-readme-modal">&times;</span>
+                </div>
+                <div id="readme-content" class="readme-content">
+                    <!-- README content will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sticky Footer -->
+    <footer class="sticky-footer">
+        <div class="footer-content">
+            <p>&copy; 2025 FABREulous Technology. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
